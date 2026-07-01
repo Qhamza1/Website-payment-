@@ -1,0 +1,1191 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Special Packages — Hamza Website Services</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;600;700&family=Manrope:wght@400;500;600;700&display=swap');
+
+  :root{
+    --bg-void: #120a26;
+    --bg-deep: #1a0f38;
+    --panel: #271751;
+    --panel-2: #1a0f38;
+    --gold: #f7a92b;
+    --gold-2: #d97a14;
+    --violet: #8b5cf6;
+    --violet-2: #5b21b6;
+    --cyan: #6ee7f5;
+    --text-main: #f7f5ff;
+    --text-dim: #b6abda;
+    --line: rgba(247,245,255,0.16);
+  }
+
+  *{ box-sizing:border-box; }
+  html{ scroll-behavior:smooth; }
+
+  body{
+    margin:0;
+    min-height:100vh;
+    background: var(--bg-void);
+    font-family:'Manrope', sans-serif;
+    color:var(--text-main);
+    overflow-x:hidden;
+  }
+
+  /* ambient moving glow */
+  .ambient{
+    position:fixed;
+    inset:0;
+    z-index:0;
+    pointer-events:none;
+    background:
+      radial-gradient(620px 420px at 18% 12%, rgba(139,92,246,0.22), transparent 65%),
+      radial-gradient(700px 480px at 85% 15%, rgba(247,169,43,0.16), transparent 60%),
+      radial-gradient(800px 600px at 50% 100%, rgba(91,33,182,0.25), transparent 65%);
+    animation: drift 16s ease-in-out infinite alternate;
+  }
+  @keyframes drift{
+    0%{ filter:hue-rotate(0deg) brightness(1); }
+    100%{ filter:hue-rotate(8deg) brightness(1.08); }
+  }
+
+  .stage{
+    position:relative;
+    z-index:1;
+    max-width:1180px;
+    margin:0 auto;
+    padding:64px 24px 40px;
+  }
+
+  /* corner gems */
+  .gem{
+    position:absolute;
+    width:120px; height:120px;
+    background: conic-gradient(from 180deg at 50% 50%, var(--cyan), var(--violet), var(--gold), #f472b6, var(--cyan));
+    clip-path: polygon(50% 0%, 100% 38%, 82% 100%, 18% 100%, 0% 38%);
+    opacity:0.9;
+    animation: spin-slow 22s linear infinite;
+    pointer-events:none;
+  }
+  .gem::before{
+    content:"";
+    position:absolute; inset:0;
+    background:
+      linear-gradient(135deg, transparent 48%, rgba(18,10,38,0.55) 49%, transparent 50%),
+      linear-gradient(45deg, transparent 48%, rgba(18,10,38,0.55) 49%, transparent 50%);
+    clip-path: inherit;
+  }
+  @keyframes spin-slow{
+    0%{ transform: rotate(-12deg); }
+    100%{ transform: rotate(348deg); }
+  }
+  .gem-tl{ top:-6px; left:-36px; }
+  .gem-tr{ top:-26px; right:-46px; width:150px; height:150px; animation-duration:28s; }
+
+  /* heading */
+  .heading{
+    position:relative; z-index:2;
+    text-align:center;
+    margin-bottom:18px;
+    opacity:0;
+    animation: rise 0.7s ease forwards;
+  }
+  .eyebrow{
+    display:inline-flex; align-items:center; gap:8px;
+    font-family:'Space Grotesk', sans-serif;
+    font-weight:700; letter-spacing:0.18em; font-size:13px;
+    color:var(--gold);
+    margin:0 0 14px;
+    padding:6px 16px;
+    border:1px solid rgba(247,169,43,0.4);
+    border-radius:999px;
+    background: rgba(247,169,43,0.08);
+  }
+  .eyebrow .dot{
+    width:6px; height:6px; border-radius:50%;
+    background:var(--gold);
+    animation: pulse-dot 1.6s ease-in-out infinite;
+  }
+  @keyframes pulse-dot{ 0%,100%{ opacity:1;} 50%{ opacity:0.25;} }
+
+  .title{
+    font-family:'Space Grotesk', sans-serif;
+    font-weight:700; text-transform:uppercase;
+    font-size:clamp(28px, 5vw, 50px);
+    letter-spacing:0.03em;
+    margin:0 0 16px;
+    line-height:1.08;
+  }
+  .subtitle{
+    max-width:560px;
+    margin:0 auto;
+    color:var(--text-dim);
+    font-size:16px;
+    line-height:1.6;
+  }
+
+  .trust{
+    display:flex; justify-content:center; align-items:center; gap:10px;
+    margin:22px 0 50px;
+    font-size:13.5px;
+    color:var(--text-dim);
+    opacity:0;
+    animation: rise 0.7s ease 0.15s forwards;
+  }
+  .stars{ color:var(--gold); letter-spacing:2px; font-size:14px; }
+
+  /* cards grid */
+  .cards{
+    position:relative; z-index:2;
+    display:grid;
+    grid-template-columns:1fr 1.1fr 1fr;
+    align-items:start;
+    gap:22px;
+    margin-bottom: 60px;
+  }
+
+  .card{
+    position:relative;
+    background: linear-gradient(180deg, var(--panel) 0%, var(--panel-2) 100%);
+    border:1px solid rgba(255,255,255,0.07);
+    border-radius:20px;
+    padding:34px 28px 30px;
+    opacity:0;
+    transform: translateY(24px);
+    animation: rise 0.6s ease forwards;
+    transition: transform 0.35s cubic-bezier(.2,.8,.2,1), box-shadow 0.35s ease, border-color 0.35s ease;
+  }
+  .card:nth-child(1){ animation-delay:0.25s; margin-top:34px; }
+  .card:nth-child(2){ animation-delay:0.35s; }
+  .card:nth-child(3){ animation-delay:0.45s; margin-top:34px; }
+
+  .card:hover{
+    transform: translateY(-8px);
+    border-color: rgba(255,255,255,0.18);
+    box-shadow: 0 20px 40px -16px rgba(0,0,0,0.5);
+  }
+
+  .card.featured{
+    background: linear-gradient(165deg, var(--gold) 0%, var(--gold-2) 52%, var(--panel-2) 100%);
+    transform: scale(1.07);
+    box-shadow: 0 28px 55px -14px rgba(247,169,43,0.4), 0 0 0 1px rgba(255,255,255,0.08);
+    z-index:3;
+  }
+  .card.featured:hover{ transform: scale(1.07) translateY(-8px); }
+
+  .card-icon{
+    width:46px; height:46px;
+    border-radius:12px;
+    display:flex; align-items:center; justify-content:center;
+    background: linear-gradient(135deg, var(--violet), var(--violet-2));
+    margin-bottom:18px;
+    box-shadow: 0 8px 18px -6px rgba(91,33,182,0.6);
+  }
+  .card.featured .card-icon{
+    background: linear-gradient(135deg, #2a1758, #1a0f38);
+    box-shadow: 0 8px 18px -6px rgba(0,0,0,0.45);
+  }
+  .card-icon svg{ width:22px; height:22px; }
+
+  .badge{
+    position:absolute; top:-15px; left:50%; transform:translateX(-50%);
+    background: var(--violet-2);
+    color:#fff; font-family:'Space Grotesk', sans-serif;
+    font-size:12.5px; font-weight:700; letter-spacing:0.05em;
+    padding:8px 18px; border-radius:999px;
+    box-shadow:0 8px 18px rgba(0,0,0,0.35);
+    white-space:nowrap;
+    overflow:hidden;
+  }
+  .badge::after{
+    content:"";
+    position:absolute; top:0; left:-60%;
+    width:40%; height:100%;
+    background: linear-gradient(120deg, transparent, rgba(255,255,255,0.55), transparent);
+    animation: shimmer 2.6s ease-in-out infinite;
+  }
+  @keyframes shimmer{
+    0%{ left:-60%; }
+    60%{ left:140%; }
+    100%{ left:140%; }
+  }
+
+  .card h3{
+    font-family:'Space Grotesk', sans-serif;
+    text-transform:uppercase;
+    font-size:21px; font-weight:700; line-height:1.25;
+    margin:0 0 6px;
+    min-height:54px;
+  }
+  .card .tagline{
+    font-size:13.5px;
+    color: var(--text-dim);
+    margin:0 0 22px;
+  }
+  .card.featured .tagline{ color: rgba(26,15,56,0.75); }
+
+  .features{
+    list-style:none; margin:0 0 26px; padding:0;
+  }
+  .features li{
+    display:flex; align-items:flex-start; gap:10px;
+    padding:11px 0;
+    border-bottom:1px solid var(--line);
+    font-size:14.5px;
+    color:var(--text-main);
+  }
+  .card.featured .features li{ border-bottom-color: rgba(26,15,56,0.18); }
+  .features li:last-child{ border-bottom:none; }
+  .features svg{ flex:0 0 auto; width:16px; height:16px; margin-top:2px; color:var(--cyan); }
+  .card.featured .features svg{ color:#1a0f38; }
+
+  .price-row{
+    display:flex; align-items:baseline; justify-content:space-between;
+    margin-bottom:14px;
+  }
+  .price{
+    font-family:'Space Grotesk', sans-serif;
+    font-size:30px; font-weight:700;
+  }
+  .price-note{ font-size:12px; color:var(--text-dim); }
+  .card.featured .price-note{ color: rgba(26,15,56,0.7); }
+
+  .price-btn{
+    appearance:none; border:none; cursor:pointer;
+    width:100%; padding:15px 18px;
+    border-radius:12px;
+    display:flex; align-items:center; justify-content:center; gap:8px;
+    font-family:'Space Grotesk', sans-serif;
+    font-size:15.5px; font-weight:700; letter-spacing:0.02em;
+    color:#fff;
+    background: linear-gradient(135deg, var(--violet) 0%, var(--violet-2) 100%);
+    box-shadow: 0 10px 22px -6px rgba(91,33,182,0.55);
+    transition: transform 0.2s ease, box-shadow 0.2s ease, filter 0.2s ease, background 0.3s ease;
+  }
+  .price-btn svg{ width:16px; height:16px; transition: transform 0.25s ease; }
+  .price-btn:hover{
+    transform: translateY(-2px);
+    filter:brightness(1.1);
+    box-shadow: 0 16px 28px -6px rgba(91,33,182,0.75);
+  }
+  .price-btn:hover svg{ transform: translateX(4px); }
+  .price-btn:active{ transform: translateY(0); }
+  .price-btn:focus-visible{ outline:3px solid #fff; outline-offset:3px; }
+
+  .price-btn.selected{
+    background: linear-gradient(135deg, #22c55e, #15803d);
+    box-shadow: 0 10px 22px -6px rgba(21,128,61,0.55);
+  }
+
+  /* sticky selection summary */
+  .summary-bar{
+    position:fixed;
+    left:50%;
+    bottom:18px;
+    transform: translateX(-50%) translateY(140%);
+    z-index:10;
+    display:flex; align-items:center; gap:18px;
+    background: rgba(26,15,56,0.92);
+    backdrop-filter: blur(10px);
+    border:1px solid rgba(255,255,255,0.12);
+    border-radius:16px;
+    padding:14px 18px 14px 20px;
+    box-shadow:0 20px 45px rgba(0,0,0,0.45);
+    transition: transform 0.4s cubic-bezier(.2,.8,.2,1);
+    max-width:92vw;
+  }
+  .summary-bar.show{ transform: translateX(-50%) translateY(0); }
+  .summary-bar .info{ font-size:14px; line-height:1.3; }
+  .summary-bar .info strong{ font-family:'Space Grotesk', sans-serif; color:var(--gold); }
+  .summary-bar .go{
+    appearance:none; border:none; cursor:pointer;
+    font-family:'Space Grotesk', sans-serif; font-weight:700; font-size:14px;
+    color:#1a0f38;
+    background: linear-gradient(135deg, var(--gold), var(--gold-2));
+    padding:10px 18px; border-radius:10px;
+    white-space:nowrap;
+    transition: transform 0.2s ease;
+  }
+  .summary-bar .go:hover{ transform: translateY(-2px); }
+  .summary-bar .close{
+    appearance:none; border:none; background:none; cursor:pointer;
+    color:var(--text-dim); font-size:18px; line-height:1; padding:4px;
+  }
+
+  /* Social Media Footer Style */
+  .social-footer {
+    position: relative;
+    z-index: 2;
+    margin-top: 50px;
+    padding-top: 30px;
+    border-top: 1px solid var(--line);
+    text-align: center;
+  }
+  .social-footer p {
+    font-size: 14px;
+    color: var(--text-dim);
+    margin: 0 0 18px;
+    font-family: 'Space Grotesk', sans-serif;
+    letter-spacing: 0.05em;
+  }
+  .social-icons {
+    display: flex;
+    justify-content: center;
+    gap: 16px;
+  }
+  .social-link {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 44px;
+    height: 44px;
+    border-radius: 50%;
+    background: rgba(255, 255, 255, 0.04);
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    color: var(--text-dim);
+    text-decoration: none;
+    transition: all 0.3s cubic-bezier(.2,.8,.2,1);
+  }
+  .social-link svg { width: 20px; height: 20px; fill: currentColor; }
+  
+  .social-link.twitter:hover { color: #fff; background: #1da1f2; border-color: #1da1f2; box-shadow: 0 0 20px rgba(29, 161, 242, 0.6); transform: translateY(-4px); }
+  .social-link.facebook:hover { color: #fff; background: #1877f2; border-color: #1877f2; box-shadow: 0 0 20px rgba(24, 119, 242, 0.6); transform: translateY(-4px); }
+  .social-link.whatsapp:hover { color: #fff; background: #25d366; border-color: #25d366; box-shadow: 0 0 20px rgba(37, 211, 102, 0.6); transform: translateY(-4px); }
+  .social-link.instagram:hover { color: #fff; background: linear-gradient(45deg, #f09433 0%, #e6683c 25%, #dc2743 50%, #cc2366 75%, #bc1888 100%); border-color: #e6683c; box-shadow: 0 0 20px rgba(220, 39, 67, 0.6); transform: translateY(-4px); }
+
+  /* ─── NEW CREATIVE PAYMENT MODAL STYLES ─── */
+  .modal-overlay {
+    position: fixed;
+    inset: 0;
+    height: 100dvh;
+    background: rgba(18, 10, 38, 0.85);
+    backdrop-filter: blur(16px);
+    -webkit-backdrop-filter: blur(16px);
+    z-index: 100;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.4s ease;
+    padding: 20px;
+    overflow-y: auto;
+  }
+  body.no-scroll{
+    overflow: hidden;
+    position: fixed;
+    inset: 0;
+    width: 100%;
+  }
+  .modal-overlay.active {
+    opacity: 1;
+    pointer-events: all;
+  }
+  .modal-container {
+    background: linear-gradient(180deg, var(--panel) 0%, var(--panel-2) 100%);
+    border: 1px solid rgba(255,255,255,0.12);
+    border-radius: 24px;
+    width: 100%;
+    max-width: 520px;
+    padding: 34px 30px;
+    box-shadow: 0 30px 70px rgba(0,0,0,0.6), inset 0 1px 0 rgba(255,255,255,0.1);
+    transform: scale(0.9) translateY(20px);
+    transition: transform 0.4s cubic-bezier(.2,.8,.2,1);
+    position: relative;
+    text-align: center;
+  }
+  .modal-overlay.active .modal-container {
+    transform: scale(1) translateY(0);
+  }
+  .modal-close {
+    position: absolute;
+    top: 20px; right: 20px;
+    background: rgba(255,255,255,0.05);
+    border: 1px solid rgba(255,255,255,0.1);
+    color: var(--text-dim);
+    font-size: 22px; width: 36px; height: 36px;
+    border-radius: 50%; cursor: pointer;
+    display: flex; align-items: center; justify-content: center;
+    transition: all 0.2s ease;
+  }
+  .modal-close:hover { background: rgba(255,255,255,0.15); color: #fff; }
+  
+  .modal-title {
+    font-family: 'Space Grotesk', sans-serif;
+    font-size: 24px; font-weight: 700;
+    margin: 0 0 8px; text-transform: uppercase;
+  }
+  .modal-subtitle {
+    font-size: 14px; color: var(--text-dim); margin: 0 0 28px;
+  }
+  .modal-subtitle strong { color: var(--gold); }
+
+  /* Currency Tabs */
+  .currency-tabs {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 12px;
+    background: rgba(18, 10, 38, 0.4);
+    padding: 6px;
+    border-radius: 14px;
+    border: 1px solid rgba(255,255,255,0.05);
+    margin-bottom: 26px;
+  }
+  .tab-btn {
+    appearance: none; border: none; background: none;
+    padding: 12px; font-family: 'Space Grotesk', sans-serif;
+    font-size: 15px; font-weight: 700; color: var(--text-dim);
+    cursor: pointer; border-radius: 10px;
+    transition: all 0.25s ease;
+    display: flex; align-items: center; justify-content: center; gap: 8px;
+  }
+  .tab-btn.active {
+    background: linear-gradient(135deg, var(--violet) 0%, var(--violet-2) 100%);
+    color: #fff;
+    box-shadow: 0 8px 20px -6px rgba(91,33,182,0.6);
+  }
+
+  /* Payment Options Lists */
+  .payment-methods-pane {
+    display: none;
+    animation: fadeIn 0.35s ease forwards;
+  }
+  .payment-methods-pane.active { display: block; }
+  
+  @keyframes fadeIn {
+    from { opacity: 0; transform: translateY(8px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+
+  .method-card {
+    display: flex; align-items: center; justify-content: space-between;
+    background: rgba(255,255,255,0.03);
+    border: 1px solid rgba(255,255,255,0.06);
+    border-radius: 14px;
+    padding: 16px 20px;
+    margin-bottom: 12px;
+    cursor: pointer;
+    transition: all 0.25s ease;
+  }
+  .method-card:hover {
+    background: rgba(255,255,255,0.06);
+    border-color: rgba(255,255,255,0.15);
+    transform: translateX(4px);
+  }
+  .method-info { display: flex; align-items: center; gap: 14px; }
+  
+  .method-logo {
+    width: 40px; 
+    height: 40px; 
+    border-radius: 10px;
+    display: flex; 
+    align-items: center; 
+    justify-content: center;
+    background: rgba(255, 255, 255, 0.05);
+    overflow: hidden;
+    flex-shrink: 0;
+  }
+
+  /* ─── RECEIPT / ACCOUNT DETAILS STEP ─── */
+  .back-btn{
+    display:inline-flex; align-items:center; gap:6px;
+    background:none; border:none; cursor:pointer;
+    color:var(--text-dim); font-size:13.5px; font-weight:600;
+    margin-bottom:18px; padding:4px 0;
+    transition:color 0.2s ease;
+  }
+  .back-btn:hover{ color:#fff; }
+  .back-btn svg{ width:15px; height:15px; }
+
+  .receipt-pane{ display:none; text-align:left; animation:fadeIn 0.35s ease forwards; }
+  .receipt-pane.active{ display:block; }
+
+  .method-heading{
+    display:flex; align-items:center; gap:12px;
+    margin-bottom:20px;
+  }
+  .method-heading img{ width:36px; height:36px; object-fit:contain; border-radius:8px; background:rgba(255,255,255,0.05); padding:4px; }
+  .method-heading h3{
+    font-family:'Space Grotesk', sans-serif;
+    font-size:17px; margin:0; text-transform:uppercase;
+  }
+
+  .account-box{
+    background: rgba(18,10,38,0.5);
+    border:1px solid rgba(255,255,255,0.1);
+    border-radius:14px;
+    padding:16px 18px;
+    margin-bottom:14px;
+  }
+  .account-box .account-label{
+    font-size:12px; color:var(--text-dim); text-transform:uppercase; letter-spacing:0.06em;
+    margin-bottom:6px;
+  }
+  .account-row{
+    display:flex; align-items:center; justify-content:space-between; gap:10px;
+  }
+  .account-value{
+    font-family:'Space Grotesk', sans-serif;
+    font-size:16px; font-weight:700; color:var(--gold);
+    word-break:break-all;
+  }
+  .copy-btn{
+    flex:0 0 auto;
+    appearance:none; cursor:pointer;
+    background: rgba(139,92,246,0.18);
+    border:1px solid rgba(139,92,246,0.4);
+    color:#fff; font-size:12.5px; font-weight:600;
+    padding:8px 12px; border-radius:8px;
+    transition: background 0.2s ease;
+  }
+  .copy-btn:hover{ background: rgba(139,92,246,0.32); }
+  .account-hint{
+    font-size:13px; color:var(--text-dim); line-height:1.5; margin:0 0 22px;
+  }
+
+  .upload-zone{
+    display:block;
+    position:relative;
+    width:100%;
+    border:1.5px dashed rgba(255,255,255,0.22);
+    border-radius:14px;
+    padding:22px 16px;
+    text-align:center;
+    cursor:pointer;
+    transition: border-color 0.2s ease, background 0.2s ease;
+    margin-bottom:16px;
+    box-sizing:border-box;
+  }
+  .upload-zone:hover, .upload-zone.dragover{
+    border-color: var(--gold);
+    background: rgba(247,169,43,0.06);
+  }
+  .upload-zone input[type=file]{
+    position:absolute; inset:0; opacity:0; cursor:pointer;
+  }
+  .upload-zone .upload-icon{ width:26px; height:26px; margin:0 auto 8px; color:var(--text-dim); }
+  .upload-zone .upload-text{ font-size:13.5px; color:var(--text-dim); }
+  .upload-zone .upload-text strong{ color:#fff; }
+
+  .preview-wrap{ display:none; align-items:center; gap:12px; margin-bottom:16px; }
+  .preview-wrap.show{ display:flex; }
+  .preview-img{
+    width:56px; height:56px; object-fit:cover; border-radius:10px;
+    border:1px solid rgba(255,255,255,0.15);
+  }
+  .preview-name{ font-size:13px; color:var(--text-dim); word-break:break-all; }
+  .preview-remove{
+    appearance:none; border:none; background:none; cursor:pointer;
+    color:var(--text-dim); font-size:18px; margin-left:auto; padding:4px;
+  }
+  .preview-remove:hover{ color:#f87171; }
+
+  .send-btn{
+    appearance:none; border:none; cursor:pointer;
+    width:100%; padding:15px 18px; border-radius:12px;
+    font-family:'Space Grotesk', sans-serif; font-size:15px; font-weight:700;
+    color:#fff;
+    display:flex; align-items:center; justify-content:center; gap:8px;
+    background: linear-gradient(135deg, var(--gold), var(--gold-2));
+    box-shadow: 0 10px 22px -6px rgba(247,169,43,0.5);
+    transition: transform 0.2s ease, filter 0.2s ease, opacity 0.2s ease;
+  }
+  .send-btn:hover:not(:disabled){ transform: translateY(-2px); filter:brightness(1.08); }
+  .send-btn:disabled{ opacity:0.45; cursor:not-allowed; }
+
+  .spinner{
+    width:16px; height:16px; border-radius:50%;
+    border:2.5px solid rgba(255,255,255,0.4); border-top-color:#fff;
+    animation: spin 0.7s linear infinite;
+  }
+  @keyframes spin{ to{ transform: rotate(360deg); } }
+
+  .status-msg{
+    margin-top:14px; font-size:13.5px; line-height:1.6;
+    padding:12px 14px; border-radius:10px;
+    display:none;
+  }
+  .status-msg.show{ display:block; }
+  .status-msg.success{ background: rgba(34,197,94,0.12); border:1px solid rgba(34,197,94,0.35); color:#86efac; }
+  .status-msg.error{ background: rgba(248,113,113,0.12); border:1px solid rgba(248,113,113,0.35); color:#fca5a5; }
+  .status-msg a{ color:inherit; font-weight:700; }
+
+  @keyframes rise{
+    from{ opacity:0; transform: translateY(24px); }
+    to{ opacity:1; transform: translateY(0); }
+  }
+
+  /*  responsive */
+  @media (max-width: 880px){
+    .cards{ grid-template-columns:1fr; gap:26px; }
+    .card, .card:nth-child(1), .card:nth-child(3){ margin-top:0; }
+    .card.featured{ order:-1; transform:none; }
+    .card.featured:hover{ transform: translateY(-8px); }
+    .gem-tl, .gem-tr{ display:none; }
+    .summary-bar{ flex-wrap:wrap; justify-content:center; text-align:center; }
+  }
+
+  @media (prefers-reduced-motion: reduce){
+    *{ animation:none !important; transition:none !important; }
+  }
+</style>
+</head>
+<body>
+
+<div class="ambient"></div>
+
+<div class="stage">
+  <div class="gem gem-tl"></div>
+  <div class="gem gem-tr"></div>
+
+  <div class="heading">
+    <span class="eyebrow"><span class="dot"></span>SPECIAL PACKAGES</span>
+    <h1 class="title">Hamza Website Services</h1>
+    <p class="subtitle">Launch a site that looks built by a full team — without the full-team price tag. Pick a package below and we'll get started this week.</p>
+  </div>
+
+  <div class="trust">
+    <span class="stars">★★★★★</span>
+    <span>4.9/5 from 40+ businesses we've launched</span>
+  </div>
+
+  <div class="cards">
+
+    <article class="card" data-name="BACK-END &amp; DATABASE" data-price="$579">
+      <div class="card-icon">
+        <svg viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"></polygon></svg>
+      </div>
+      <h3>BACK-END &amp; DATABASE</h3>
+      <p class="tagline">The engine room — built solid and ready to scale.</p>
+      <ul class="features">
+        <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"></polyline></svg>Website Structure & Routing (Controllers, Models, Views)</li>
+        <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"></polyline></svg>Custom CMS Integration (or Advanced WordPress Setup)</li>
+        <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"></polyline></svg>Database Design (Relations, Indexes, Complex Queries)</li>
+        <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"></polyline></svg>Admin Dashboard for Content & News Management</li>
+        <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"></polyline></svg>Authentication System (Admin/User Roles)</li>
+        <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"></polyline></svg>Basic REST API for Data</li>
+      </ul>
+      <div class="price-row">
+        <span class="price">$579</span>
+        <span class="price-note">one-time</span>
+      </div>
+      <button class="price-btn" type="button">
+        Choose Plan
+        <svg viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="12" x2="19" y2="12"></line><polyline points="12 5 19 12 12 19"></polyline></svg>
+      </button>
+    </article>
+
+    <article class="card featured" data-name="DEVOPS &amp; LAUNCH" data-price="$710">
+      <span class="badge">Best Value</span>
+      <div class="card-icon">
+        <svg viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"></circle><polygon points="12 8 14 12 12 16 10 12 12 8"></polygon></svg>
+      </div>
+      <h3>DEVOPS &amp; LAUNCH</h3>
+      <p class="tagline">Everything you need to go live and get found.</p>
+      <ul class="features">
+        <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"></polyline></svg>SSL Certificate Installation & Security Hardening</li>
+        <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"></polyline></svg>Live Server Deployment (Hosting or VPS)</li>
+        <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"></polyline></svg>Basic SEO Setup (Titles, Meta Descriptions, Sitemap)</li>
+        <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"></polyline></svg>Google Analytics & Search Console Integration</li>
+        <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"></polyline></svg>Performance Optimization (Image Compression, Caching, Minification)</li>
+        <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"></polyline></svg>Automated Backup System</li>
+      </ul>
+      <div class="price-row">
+        <span class="price">$710</span>
+        <span class="price-note">one-time</span>
+      </div>
+      <button class="price-btn" type="button">
+        Choose Plan
+        <svg viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="12" x2="19" y2="12"></line><polyline points="12 5 19 12 12 19"></polyline></svg>
+      </button>
+    </article>
+
+    <article class="card" data-name="FRONT-END&amp; BRANDING" data-price="$469">
+      <div class="card-icon">
+        <svg viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 19l7-7 3 3-7 7-3-3z"></path><path d="M18 13l-1.5-7.5L2 2l3.5 14.5L13 18l5-5z"></path><path d="M2 2l7.586 7.586"></path><circle cx="11" cy="11" r="2"></circle></svg>
+      </div>
+      <h3>FRONT-END &amp; BRANDING</h3>
+      <p class="tagline">A look people remember and trust instantly.</p>
+      <ul class="features">
+        <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"></polyline></svg>UI/UX Design (Homepage, Inner Pages, Forms)</li>
+        <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"></polyline></svg>Fully Responsive (Mobile, Tablet, Desktop)</li>
+        <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"></polyline></svg>Interactive Animations & Transitions (CSS/JS)</li>
+        <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"></polyline></svg>Logo Design & Visual Identity (Colors, Icons, Typography)</li>
+        <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"></polyline></svg>Social Media Integration (Share Buttons, Feeds)</li>
+      </ul>
+      <div class="price-row">
+        <span class="price">$469</span>
+        <span class="price-note">one-time</span>
+      </div>
+      <button class="price-btn" type="button">
+        Choose Plan
+        <svg viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="12" x2="19" y2="12"></line><polyline points="12 5 19 12 12 19"></polyline></svg>
+      </button>
+    </article>
+
+  </div>
+
+  <footer class="social-footer">
+    <p>Contact me</p>
+    <p>HAMZA™2026©</p>
+    <div class="social-icons">
+      <a href="https://x.com/PHOENIX_HAMZA1" class="social-link twitter" target="_blank" aria-label="Twitter">
+        <svg viewBox="0 0 24 24"><path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/></svg>
+      </a>
+      <a href="https://www.facebook.com/share/1EG5kSnXvM/" class="social-link facebook" target="_blank" aria-label="Facebook">
+        <svg viewBox="0 0 24 24"><path d="M22 12.06C22 6.505 17.523 2 12 2S2 6.505 2 12.06c0 5.02 3.657 9.184 8.438 9.94v-7.03H7.898v-2.91h2.54V9.845c0-2.507 1.492-3.89 3.777-3.89 1.094 0 2.238.195 2.238.195v2.46h-1.26c-1.243 0-1.63.771-1.63 1.562v1.877h2.773l-.443 2.91h-2.33V22c4.78-.756 8.437-4.92 8.437-9.94z"/></svg>
+      </a>
+      <a href="https://wa.me/201066350362" class="social-link whatsapp" target="_blank" aria-label="WhatsApp">
+        <svg viewBox="0 0 24 24"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347zM12.05 21.785h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884zm8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>
+      </a>
+      <a href="https://instagram.com/q_7vmza" class="social-link instagram" target="_blank" aria-label="Instagram">
+        <svg viewBox="0 0 24 24"><path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zM12 0C8.741 0 8.333.014 7.053.072 2.695.272.273 2.69.073 7.051.014 8.333 0 8.741 0 12c0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98C15.668.014 15.259 0 12 0zm0 5.838a6.162 6.162 0 100 12.324 6.162 6.162 0 000-12.324zM12 16a4 4 0 110-8 4 4 0 010 8zm6.406-11.845a1.44 1.44 0 100 2.881 1.44 1.44 0 000-2.881z"/></svg>
+      </a>
+    </div>
+  </footer>
+</div>
+
+<div class="summary-bar" id="summaryBar">
+  <div class="info">You selected <strong id="summaryName">—</strong> for <strong id="summaryPrice">—</strong></div>
+  <button class="go" id="summaryGo">Continue →</button>
+  <button class="close" id="summaryClose" aria-label="Dismiss">&times;</button>
+</div>
+
+<div class="modal-overlay" id="paymentModal">
+  <div class="modal-container">
+    <button class="modal-close" id="closeModal">&times;</button>
+    <h2 class="modal-title">Secure Checkout</h2>
+    <div class="modal-subtitle">Pay for <strong id="modalPlanName">—</strong></div>
+    
+    <div class="currency-tabs">
+      <button class="tab-btn active" data-tab="usd">
+        🇺🇸 Crypto (USD)
+      </button>
+      <button class="tab-btn" data-tab="egp">
+        🇪🇬 Egyptian (EGP)
+      </button>
+    </div>
+    
+    <div class="payment-methods-pane active" id="pane-usd">
+      <div class="method-card" onclick="triggerPayment('Binance')">
+        <div class="method-info">
+          <div class="method-logo">
+            <img src="https://i.postimg.cc/W3JJHc4m/FB-IMG-1782215316884.jpg" alt="Binance" style="width: 24px; height: 24px; object-fit: contain;">
+          </div>
+          <span class="method-name">Binance Pay</span>
+        </div>
+        <span class="method-action">Pay with Crypto →</span>
+      </div>
+
+      <div class="method-card" onclick="triggerPayment('OKX')">
+        <div class="method-info">
+          <div class="method-logo">
+            <img src="https://i.postimg.cc/gJ66Tb0q/FB-IMG-1782215271093.jpg" alt="OKX" style="width: 24px; height: 24px; object-fit: contain; filter: invert(1);">
+          </div>
+          <span class="method-name">OKX Wallet</span>
+        </div>
+        <span class="method-action">Pay with Crypto →</span>
+      </div>
+
+      <div class="method-card" onclick="triggerPayment('Bybit')">
+        <div class="method-info">
+          <div class="method-logo">
+            <img src="https://i.postimg.cc/tTVVMGgN/FB-IMG-1782215209242.jpg" alt="Bybit" style="width: 28px; height: 28px; object-fit: contain;">
+          </div>
+          <span class="method-name">Bybit Pay</span>
+        </div>
+        <span class="method-action">Pay with Crypto →</span>
+      </div>
+    </div> <div class="payment-methods-pane" id="pane-egp">
+      <div class="method-card" onclick="triggerPayment('Instapay')">
+        <div class="method-info">
+          <div class="method-logo" style="background: transparent;">
+            <img src="https://i.postimg.cc/d1TTxc06/FB-IMG-1782215016676.jpg" alt="Instapay" style="width: 32px; height: 32px; object-fit: contain;">
+          </div>
+          <span class="method-name">Instapay</span>
+        </div>
+        <span class="method-action">تحويل لحظي ←</span>
+      </div>
+
+      <div class="method-card" onclick="triggerPayment('Vodafone Cash')">
+        <div class="method-info">
+          <div class="method-logo" style="background: transparent;">
+            <img src="https://i.postimg.cc/W3JJHc47/FB-IMG-1782215147510.jpg" alt="Vodafone Cash" style="width: 26px; height: 26px; object-fit: contain;">
+          </div>
+          <span class="method-name">Vodafone Cash</span>
+        </div>
+        <span class="method-action">تحويل كاش ←</span>
+      </div>
+    </div>
+
+    <div class="receipt-pane" id="pane-receipt">
+      <button class="back-btn" id="backToMethods">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="19" y1="12" x2="5" y2="12"></line><polyline points="12 19 5 12 12 5"></polyline></svg>
+        Back to payment methods
+      </button>
+
+      <div class="method-heading">
+        <img id="methodLogo" src="" alt="">
+        <h3 id="methodTitle">—</h3>
+      </div>
+
+      <div class="account-box">
+        <div class="account-label" id="accountLabel">Account</div>
+        <div class="account-row">
+          <span class="account-value" id="accountValue">—</span>
+          <button class="copy-btn" id="copyAccountBtn" type="button">Copy</button>
+        </div>
+      </div>
+      <p class="account-hint" id="accountHint"></p>
+
+      <label class="upload-zone" id="uploadZone">
+        <input type="file" id="receiptInput" accept="image/*">
+        <svg class="upload-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path><polyline points="17 8 12 3 7 8"></polyline><line x1="12" y1="3" x2="12" y2="15"></line></svg>
+        <div class="upload-text"><strong>Tap to upload</strong><br>a screenshot of your transfer receipt</div>
+      </label>
+
+      <div class="preview-wrap" id="previewWrap">
+        <img class="preview-img" id="previewImg" src="" alt="Receipt preview">
+        <span class="preview-name" id="previewName"></span>
+        <button class="preview-remove" id="previewRemove" type="button" aria-label="Remove file">&times;</button>
+      </div>
+
+      <button class="send-btn" id="sendReceiptBtn" type="button" disabled>
+        Send Receipt
+      </button>
+
+      <div class="status-msg" id="statusMsg"></div>
+    </div>
+
+  </div>
+</div>
+
+<script>
+  /* ══════════════════════════════════════════════════════════
+     CONFIG — edit these three sections with your real details
+     ══════════════════════════════════════════════════════════ */
+
+  // 1) Get a free key at https://api.imgbb.com/ and paste it here.
+  const IMGBB_API_KEY = '5b5b9be41904239d9320e800dfe90db8';
+
+  // 2) Where the receipt should be sent once uploaded.
+  //    WhatsApp number in international format, digits only, no "+".
+  const OWNER_WHATSAPP = '201066350362';
+
+  // 3) Your real account / wallet / number for each payment method.
+  const PAYMENT_INFO = {
+    'Binance': {
+      logo: 'https://i.postimg.cc/W3JJHc4m/FB-IMG-1782215316884.jpg',
+      label: 'Binance Pay ID',
+      value: '976450702',
+      hint: 'Open Binance → Pay → Send, enter this Pay ID, and transfer the exact plan amount in USDT.'
+    },
+    'OKX': {
+      logo: 'https://i.postimg.cc/gJ66Tb0q/FB-IMG-1782215271093.jpg',
+      label: 'OKX UID',
+      value: '622902063286221455',
+      hint: 'Open OKX → Fund transfer / Send, enter this UID, and transfer the exact plan amount.'
+    },
+    'Bybit': {
+      logo: 'https://i.postimg.cc/tTVVMGgN/FB-IMG-1782215209242.jpg',
+      label: 'Bybit UID',
+      value: '269813075',
+      hint: 'Open Bybit → Assets → Transfer, enter this UID, and send the exact plan amount.'
+    },
+    'Instapay': {
+      logo: 'https://i.postimg.cc/d1TTxc06/FB-IMG-1782215016676.jpg',
+      label: 'Instapay Address',
+      value: 'hamzayousry12@instapay',
+      hint: 'حوّل المبلغ المطلوب إلى عنوان الإنستاباي الموضح أعلاه، ثم ارفع لقطة شاشة لإيصال التحويل.'
+    },
+    'Vodafone Cash': {
+      logo: 'https://i.postimg.cc/W3JJHc47/FB-IMG-1782215147510.jpg',
+      label: 'Vodafone Cash Number',
+      value: '01066350362',
+      hint: 'حوّل المبلغ المطلوب على رقم فودافون كاش الموضح أعلاه، ثم ارفع لقطة شاشة لإيصال التحويل.'
+    }
+  };
+
+  /* ══════════════════════════════════════════════════════════ */
+
+  const buttons = document.querySelectorAll('.price-btn');
+  const summaryBar = document.getElementById('summaryBar');
+  const summaryName = document.getElementById('summaryName');
+  const summaryPrice = document.getElementById('summaryPrice');
+
+  // Modal Elements
+  const paymentModal = document.getElementById('paymentModal');
+  const closeModal = document.getElementById('closeModal');
+  const modalPlanName = document.getElementById('modalPlanName');
+  const tabButtons = document.querySelectorAll('.tab-btn');
+  const currencyTabs = document.querySelector('.currency-tabs');
+  const panes = document.querySelectorAll('.payment-methods-pane');
+
+  // Receipt step elements
+  const receiptPane = document.getElementById('pane-receipt');
+  const backToMethods = document.getElementById('backToMethods');
+  const methodLogo = document.getElementById('methodLogo');
+  const methodTitle = document.getElementById('methodTitle');
+  const accountLabel = document.getElementById('accountLabel');
+  const accountValue = document.getElementById('accountValue');
+  const accountHint = document.getElementById('accountHint');
+  const copyAccountBtn = document.getElementById('copyAccountBtn');
+  const uploadZone = document.getElementById('uploadZone');
+  const receiptInput = document.getElementById('receiptInput');
+  const previewWrap = document.getElementById('previewWrap');
+  const previewImg = document.getElementById('previewImg');
+  const previewName = document.getElementById('previewName');
+  const previewRemove = document.getElementById('previewRemove');
+  const sendReceiptBtn = document.getElementById('sendReceiptBtn');
+  const statusMsg = document.getElementById('statusMsg');
+
+  let selectedPlan = "";
+  let selectedPrice = "";
+  let selectedMethod = "";
+  let selectedFile = null;
+
+  let scrollY = 0;
+
+  function lockScroll() {
+    scrollY = window.scrollY;
+    document.body.style.top = `-${scrollY}px`;
+    document.body.classList.add('no-scroll');
+  }
+
+  function unlockScroll() {
+    document.body.classList.remove('no-scroll');
+    document.body.style.top = '';
+    window.scrollTo(0, scrollY);
+  }
+
+  // Helper to open modal
+  function openPaymentModal(name, price) {
+    selectedPlan = name.replace('&amp;', '&');
+    if (price) selectedPrice = price;
+    modalPlanName.textContent = selectedPlan;
+    resetToMethodsView();
+    paymentModal.classList.add('active');
+    lockScroll();
+  }
+
+  function resetToMethodsView() {
+    receiptPane.classList.remove('active');
+    currencyTabs.style.display = '';
+    panes.forEach(p => p.classList.toggle('active', p.id === (document.querySelector('.tab-btn.active')?.dataset.tab === 'egp' ? 'pane-egp' : 'pane-usd')));
+  }
+
+  buttons.forEach(btn => {
+    btn.addEventListener('click', (e) => {
+      e.stopPropagation();
+      const card = btn.closest('.card');
+      const name = card.dataset.name;
+      const price = card.dataset.price;
+
+      // reset all buttons
+      buttons.forEach(b => {
+        b.classList.remove('selected');
+        b.innerHTML = `Choose Plan
+          <svg viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="12" x2="19" y2="12"></line><polyline points="12 5 19 12 12 19"></polyline></svg>`;
+      });
+
+      // mark this one selected
+      btn.classList.add('selected');
+      btn.innerHTML = `Selected
+        <svg viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"></polyline></svg>`;
+
+      summaryName.textContent = name.replace('&amp;', '&');
+      summaryPrice.textContent = price;
+      summaryBar.classList.add('show');
+
+      openPaymentModal(name, price);
+    });
+  });
+
+  document.getElementById('summaryClose').addEventListener('click', () => {
+    summaryBar.classList.remove('show');
+  });
+
+  document.getElementById('summaryGo').addEventListener('click', () => {
+    if(summaryName.textContent !== "—") {
+      openPaymentModal(summaryName.textContent, summaryPrice.textContent);
+    }
+  });
+
+  closeModal.addEventListener('click', () => {
+    paymentModal.classList.remove('active');
+    unlockScroll();
+  });
+
+  paymentModal.addEventListener('click', (e) => {
+    if(e.target === paymentModal) {
+      paymentModal.classList.remove('active');
+      unlockScroll();
+    }
+  });
+
+  // Currency tabs switcher
+  tabButtons.forEach(tab => {
+    tab.addEventListener('click', () => {
+      tabButtons.forEach(t => t.classList.remove('active'));
+      panes.forEach(p => p.classList.remove('active'));
+
+      tab.classList.add('active');
+      const targetPane = document.getElementById(`pane-${tab.dataset.tab}`);
+      if(targetPane) {
+        targetPane.classList.add('active');
+      }
+    });
+  });
+
+  /* ── Step 2: show account details for the chosen method ── */
+  function triggerPayment(method) {
+    selectedMethod = method;
+    const info = PAYMENT_INFO[method];
+    if (!info) return;
+
+    methodLogo.src = info.logo;
+    methodLogo.alt = method;
+    methodTitle.textContent = method;
+    accountLabel.textContent = info.label;
+    accountValue.textContent = info.value;
+    accountHint.textContent = info.hint;
+
+    resetReceiptForm();
+
+    currencyTabs.style.display = 'none';
+    panes.forEach(p => p.classList.remove('active'));
+    receiptPane.classList.add('active');
+  }
+
+  backToMethods.addEventListener('click', resetToMethodsView);
+
+  copyAccountBtn.addEventListener('click', async () => {
+    try {
+      await navigator.clipboard.writeText(accountValue.textContent);
+      copyAccountBtn.textContent = 'Copied!';
+      setTimeout(() => copyAccountBtn.textContent = 'Copy', 1500);
+    } catch (err) {
+      showStatus('error', 'Could not copy automatically — please select and copy the account manually.');
+    }
+  });
+
+  /* ── File selection & preview ── */
+  function resetReceiptForm() {
+    selectedFile = null;
+    receiptInput.value = '';
+    previewWrap.classList.remove('show');
+    sendReceiptBtn.disabled = true;
+    sendReceiptBtn.innerHTML = 'Send Receipt';
+    statusMsg.classList.remove('show', 'success', 'error');
+    statusMsg.textContent = '';
+  }
+
+  receiptInput.addEventListener('change', (e) => {
+    const file = e.target.files[0];
+    if (!file) return;
+    if (!file.type.startsWith('image/')) {
+      showStatus('error', 'Please choose an image file (screenshot of your receipt).');
+      return;
+    }
+    selectedFile = file;
+    previewName.textContent = file.name;
+    const reader = new FileReader();
+    reader.onload = ev => { previewImg.src = ev.target.result; };
+    reader.readAsDataURL(file);
+    previewWrap.classList.add('show');
+    sendReceiptBtn.disabled = false;
+    statusMsg.classList.remove('show', 'success', 'error');
+  });
+
+  previewRemove.addEventListener('click', () => resetReceiptForm());
+
+  ['dragover', 'dragenter'].forEach(evt =>
+    uploadZone.addEventListener(evt, (e) => { e.preventDefault(); uploadZone.classList.add('dragover'); })
+  );
+  ['dragleave', 'drop'].forEach(evt =>
+    uploadZone.addEventListener(evt, (e) => { e.preventDefault(); uploadZone.classList.remove('dragover'); })
+  );
+  uploadZone.addEventListener('drop', (e) => {
+    const file = e.dataTransfer.files[0];
+    if (file) {
+      receiptInput.files = e.dataTransfer.files;
+      receiptInput.dispatchEvent(new Event('change'));
+    }
+  });
+
+  function showStatus(type, html) {
+    statusMsg.className = `status-msg show ${type}`;
+    statusMsg.innerHTML = html;
+  }
+
+  /* ── Upload to imgbb, then hand off the link to you ── */
+  sendReceiptBtn.addEventListener('click', async () => {
+    if (!selectedFile) return;
+
+    if (!IMGBB_API_KEY || IMGBB_API_KEY.trim() === '') {
+      showStatus('error', 'imgbb API key is not set up yet. Get a free key at <a href="https://api.imgbb.com/" target="_blank">api.imgbb.com</a> and paste it into the CONFIG section of this page.');
+      return;
+    }
+
+    // Open a blank tab RIGHT NOW, synchronously, while it's still a direct
+    // result of the user's click. Mobile browsers block window.open() if it
+    // happens after an "await" (like the upload), so we open it early and
+    // just redirect it once we know the WhatsApp link.
+    const waTab = window.open('', '_blank');
+
+    sendReceiptBtn.disabled = true;
+    sendReceiptBtn.innerHTML = '<span class="spinner"></span> Uploading…';
+    statusMsg.classList.remove('show', 'success', 'error');
+
+    try {
+      const formData = new FormData();
+      formData.append('image', selectedFile);
+
+      const res = await fetch(`https://api.imgbb.com/1/upload?key=${IMGBB_API_KEY}`, {
+        method: 'POST',
+        body: formData
+      });
+      const data = await res.json();
+
+      if (!data.success) {
+        throw new Error(data.error?.message || 'Upload failed');
+      }
+
+      const imageUrl = data.data.url;
+
+      const message =
+        `✅ New payment receipt\n` +
+        `Plan: ${selectedPlan}\n` +
+        `Amount: ${selectedPrice}\n` +
+        `Method: ${selectedMethod}\n` +
+        `Receipt: ${imageUrl}`;
+
+      const waLink = `https://wa.me/${OWNER_WHATSAPP}?text=${encodeURIComponent(message)}`;
+
+      showStatus('success',
+        `✅ Receipt uploaded! <a href="${imageUrl}" target="_blank">View image</a><br>` +
+        `<a href="${waLink}" target="_blank">Tap here to open WhatsApp</a> if it didn't open automatically.`
+      );
+
+      sendReceiptBtn.innerHTML = 'Sent ✓';
+
+      if (waTab && !waTab.closed) {
+        waTab.location.href = waLink;
+      } else {
+        // Popup was blocked even with the early open — fall back to
+        // navigating the current tab, or show the link for a manual tap.
+        window.location.href = waLink;
+      }
+
+    } catch (err) {
+      showStatus('error', `Upload failed: ${err.message}. Please try again.`);
+      sendReceiptBtn.disabled = false;
+      sendReceiptBtn.innerHTML = 'Send Receipt';
+    }
+  });
+</script>
+
+</body>
+</html>
